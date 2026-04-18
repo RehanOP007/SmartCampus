@@ -1,0 +1,242 @@
+/* Resource Card CSS - Match Login Page Colors */
+.resource-card {
+  background: #272757;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #505081;
+}
+
+.resource-card:hover {
+  transform: translateY(-4px);
+  border-color: #8686AC;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Header */
+.card-header-pro {
+  padding: 1rem 1.25rem;
+  background: rgba(15, 14, 71, 0.5);
+  border-bottom: 1px solid #505081;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-icon-pro {
+  font-size: 2rem;
+}
+
+.status-badge-pro {
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.status-active-pro {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+  border: 1px solid #28a745;
+}
+
+.status-inactive-pro {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+  border: 1px solid #dc3545;
+}
+
+/* Card Body */
+.card-body-pro {
+  padding: 1rem 1.25rem;
+}
+
+.resource-name-pro {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.3px;
+}
+
+.resource-details-pro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.detail-row-pro {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #8686AC;
+}
+
+.detail-icon-pro {
+  font-size: 0.85rem;
+  width: 20px;
+}
+
+.detail-text-pro {
+  flex: 1;
+}
+
+/* Card Footer */
+.card-footer-pro {
+  padding: 0.75rem 1.25rem;
+  background: rgba(15, 14, 71, 0.3);
+  border-top: 1px solid #505081;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-edit-pro {
+  flex: 1;
+  background: #505081;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.btn-edit-pro:hover {
+  background: #8686AC;
+}
+
+.btn-delete-pro {
+  flex: 1;
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid #dc3545;
+  padding: 0.5rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #dc3545;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.btn-delete-pro:hover {
+  background: rgba(220, 53, 69, 0.4);
+}
+
+/* Delete Modal */
+.delete-modal-pro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.delete-modal-content-pro {
+  background: #272757;
+  border-radius: 20px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid #505081;
+  animation: modalFadeIn 0.2s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.delete-modal-header-pro {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.warning-icon-pro {
+  font-size: 1.5rem;
+}
+
+.delete-modal-header-pro h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.delete-modal-content-pro p {
+  color: #8686AC;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.delete-warning-pro {
+  background: rgba(220, 53, 69, 0.1);
+  padding: 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #dc3545;
+  margin: 1rem 0;
+  border: 1px solid #dc3545;
+}
+
+.delete-modal-buttons-pro {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.cancel-btn-pro {
+  padding: 0.6rem 1.25rem;
+  background: #505081;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: white;
+  cursor: pointer;
+}
+
+.cancel-btn-pro:hover {
+  background: #8686AC;
+}
+
+.confirm-btn-pro {
+  padding: 0.6rem 1.25rem;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.confirm-btn-pro:hover {
+  background: #c82333;
+}
