@@ -47,7 +47,6 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
 
   // Sync with sidebar sub-section
   useEffect(() => {
-    if (activeSubSection === "add-booking")  setView("add");
     if (activeSubSection === "all-bookings") setView((v) => (v === "add" || v === "all") ? "all" : v);
   }, [activeSubSection]);
 
@@ -68,13 +67,6 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const goEdit   = (b)      => { setSelected(b);    setView("edit"); };
 
   // Actions
-  const handleAdd = async (data) => {
-    await bookingAPI.create(data);
-    await fetchBookings();
-    showToast("Booking created successfully.");
-    goAll();
-  };
-
   const handleUpdate = async (id, data) => {
     await bookingAPI.updateStatus(id, data.status);
     await fetchBookings();
@@ -128,7 +120,6 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
           onApprove={handleApprove} onReject={handleReject} onCancel={handleCancel}
         />
       )}
-      {view === "add"  && <AddBooking    onBack={goAll} onSubmit={handleAdd} />}
       {view === "edit" && selected && (
         <UpdateBooking booking={selected} onBack={goAll} onSubmit={handleUpdate} />
       )}
