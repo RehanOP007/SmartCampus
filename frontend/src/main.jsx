@@ -8,14 +8,3 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
-
-
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import TestNotifications from './component3/TestNotifications';
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <TestNotifications />
-  </React.StrictMode>
-);

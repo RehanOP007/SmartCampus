@@ -5,6 +5,7 @@ import AdminSidebar      from "./Adminsidebar";
 import UserManagement    from "./Usermanagement";
 import BookingManagement from "./BookingManagement";
 import TicketManagement from "./Ticketmanagement";
+import Resources from "../../../Component2/pages/Resources";
 import { useAuth }       from "../../../context/AuthContext";
 
 const AdminDashboard = () => {
@@ -63,6 +64,7 @@ const AdminDashboard = () => {
           {activeSection === "user-management"    && <UserManagement    activeSubSection={activeSubSection} onNavigate={handleNavigate} />}
           {activeSection === "booking-management" && <BookingManagement activeSubSection={activeSubSection} onNavigate={handleNavigate} />}
           {activeSection === "ticket-management"  && <TicketManagement  activeSubSection={activeSubSection} onNavigate={handleNavigate} />}
+          {activeSection === "resource-management" && <Resources  activeSubSection={activeSubSection} onNavigate={handleNavigate}/>}
         </main>
       </div>
     </div>

@@ -4,6 +4,22 @@ export const getAllResources = () => {
     return api.get(`/api/resources`);
 }
 
+export const getResourceById = (id) => {
+    return api.get(`/api/resources/${id}`);
+}
+
+export const createResource = (data) => {
+    return api.post(`/api/resources`, data);
+}
+
+export const updateResource = (id, data) => {
+    return api.put(`/api/resources/${id}`, data);
+}
+
+export const deleteResource = (id) => {
+    return api.delete(`/api/resources/${id}`);
+}
+
 export const createBooking = (data) => {
     return api.post(`/api/bookings`, data);
 };

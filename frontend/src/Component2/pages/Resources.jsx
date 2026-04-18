@@ -1,211 +1,136 @@
-import React, { useState } from 'react';
-import { useResource } from '../context/ResourceContext';
-import ResourceCard from '../components/ResourceCard';
-import ResourceForm from '../components/ResourceForm';
-import './Resources.css';
+import React, { useState, useEffect, useCallback } from "react";
+import { CheckCircle2, XCircle, AlertTriangle, X } from "lucide-react";
+import AllResources  from "./Allresources ";
+import AddResource   from "../components/ResourceForm";
+import EditResource  from "../components/EditResource";
+import resourceService from "../services/resourceService";
 
-const Resources = () => {
-  const { 
-    resources, 
-    loading, 
-    error, 
-    deleteResource, 
-    applyFilters, 
-    filters, 
-    clearFilters 
-  } = useResource();
+// ── Toast ─────────────────────────────────────────────────────────────────────
+const TSTYLE = {
+  success: "bg-emerald-950/80 border-emerald-500/30 text-emerald-300",
+  error:   "bg-rose-950/80    border-rose-500/30    text-rose-300",
+  warning: "bg-amber-950/80   border-amber-500/30   text-amber-300",
+};
+const TICON = { success: CheckCircle2, error: XCircle, warning: AlertTriangle };
 
-  const [showForm, setShowForm] = useState(false);
-  const [editingResource, setEditingResource] = useState(null);
-  const [deleteId, setDeleteId] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+const Toast = ({ toast, onClose }) => {
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(onClose, 3500);
+    return () => clearTimeout(t);
+  }, [toast, onClose]);
 
-  const userRole = localStorage.getItem('userRole');
-  const isAdmin = userRole === 'ADMIN';
-
-  const handleSearch = () => {
-    applyFilters({ ...filters, location: searchTerm });
-  };
-
-  const handleFilterChange = (name, value) => {
-    applyFilters({ ...filters, [name]: value });
-  };
-
+  if (!toast) return null;
+  const Icon = TICON[toast.type] ?? CheckCircle2;
   return (
-    <div className="resources-page">
-      <div className="resources-container">
-        
-        {/* Header - Center */}
-        <div className="resources-header">
-          <h1>Facilities & Resources</h1>
-          <p>Manage campus rooms, labs, and equipment</p>
-        </div>
-
-        {/* Add Button - Center */}
-        {isAdmin && (
-          <div className="add-button-wrapper">
-            <button className="btn-primary" onClick={() => setShowForm(true)}>
-              + Add New Resource
-            </button>
-          </div>
-        )}
-
-        {/* Search Bar */}
-        <div className="search-section">
-          <div className="search-wrapper">
-            <input
-              type="text"
-              placeholder="Search by location..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            />
-            <button className="search-btn" onClick={handleSearch}>
-              Search
-            </button>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className="filters-section">
-          <div className="filters-grid">
-            <div className="filter-group">
-              <label className="filter-label">TYPE</label>
-              <select 
-                className="filter-select"
-                value={filters.type} 
-                onChange={(e) => handleFilterChange('type', e.target.value)}
-              >
-                <option value="">All Types</option>
-                <option value="ROOM">Rooms</option>
-                <option value="LAB">Laboratories</option>
-                <option value="EQUIPMENT">Equipment</option>
-              </select>
-            </div>
-
-            <div className="filter-group">
-              <label className="filter-label">MIN CAPACITY</label>
-              <input
-                className="filter-input"
-                type="number"
-                placeholder="Min people"
-                value={filters.minCapacity}
-                onChange={(e) => handleFilterChange('minCapacity', e.target.value)}
-              />
-            </div>
-
-            <div className="filter-group">
-              <label className="filter-label">STATUS</label>
-              <select 
-                className="filter-select"
-                value={filters.status} 
-                onChange={(e) => handleFilterChange('status', e.target.value)}
-              >
-                <option value="">All Status</option>
-                <option value="ACTIVE">Active</option>
-                <option value="OUT_OF_SERVICE">Out of Service</option>
-              </select>
-            </div>
-
-            <div className="filter-group">
-              <button className="btn-clear" onClick={clearFilters}>
-                Clear Filters
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="stats-bar">
-          <div className="stats-count">
-            Showing <strong>{resources.length}</strong> resources
-          </div>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div style={{ background: '#f8d7da', padding: '12px', borderRadius: '10px', color: '#721c24', marginBottom: '1rem', fontSize: '0.85rem' }}>
-            ⚠️ {error}
-          </div>
-        )}
-
-        {/* Loading */}
-        {loading && (
-          <div className="loading-state">
-            <div className="loading-spinner"></div>
-            <p style={{ marginTop: '1rem', color: '#6c757d' }}>Loading resources...</p>
-          </div>
-        )}
-
-        {/* Resources Grid */}
-        {!loading && (
-          <div className="resources-grid">
-            {resources.length === 0 ? (
-              <div className="empty-state">
-                <div className="empty-icon">📦</div>
-                <h3>No resources found</h3>
-                <p>Try adjusting your filters or add a new resource</p>
-              </div>
-            ) : (
-              resources.map((resource) => (
-                <ResourceCard
-                  key={resource.id}
-                  resource={resource}
-                  onEdit={isAdmin ? () => {
-                    setEditingResource(resource);
-                    setShowForm(true);
-                  } : null}
-                  onDelete={isAdmin ? () => setDeleteId(resource.id) : null}
-                />
-              ))
-            )}
-          </div>
-        )}
+    <div className="fixed bottom-6 right-6 z-50">
+      <div className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border backdrop-blur-xl text-sm font-medium shadow-2xl ${TSTYLE[toast.type] ?? TSTYLE.success}`}>
+        <Icon size={15} className="flex-shrink-0" />
+        {toast.message}
+        <button onClick={onClose} className="ml-2 opacity-50 hover:opacity-100 transition-opacity">
+          <X size={13} />
+        </button>
       </div>
-
-      {/* Form Modal */}
-      {showForm && (
-        <ResourceForm
-          resource={editingResource}
-          onClose={() => {
-            setShowForm(false);
-            setEditingResource(null);
-          }}
-          onSuccess={() => {
-            setShowForm(false);
-            setEditingResource(null);
-          }}
-        />
-      )}
-
-      {/* Delete Modal */}
-      {deleteId && (
-        <div className="delete-modal-pro" onClick={() => setDeleteId(null)}>
-          <div className="delete-modal-content-pro" onClick={(e) => e.stopPropagation()}>
-            <div className="delete-modal-header-pro">
-              <span className="warning-icon-pro">⚠️</span>
-              <h3>Delete Resource</h3>
-            </div>
-            <p>Are you sure you want to delete this resource?</p>
-            <div className="delete-warning-pro">
-              This action cannot be undone.
-            </div>
-            <div className="delete-modal-buttons-pro">
-              <button className="cancel-btn-pro" onClick={() => setDeleteId(null)}>
-                Cancel
-              </button>
-              <button className="confirm-btn-pro" onClick={() => {
-                deleteResource(deleteId);
-                setDeleteId(null);
-              }}>
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default Resources;
+// ── Views ──────────────────────────────────────────────────────────────────────
+const V = { ALL: "all", ADD: "add", EDIT: "edit" };
+
+// ── Main ──────────────────────────────────────────────────────────────────────
+const ResourceManagement = ({ activeSubSection, onNavigate }) => {
+  const [resources,    setResources]    = useState([]);
+  const [loading,      setLoading]      = useState(false);
+  const [apiError,     setApiError]     = useState(null);
+  const [view,         setView]         = useState(V.ALL);
+  const [editingRes,   setEditingRes]   = useState(null);
+  const [toast,        setToast]        = useState(null);
+
+  const userRole = localStorage.getItem("userRole");
+  const isAdmin  = userRole === "ADMIN";
+
+  const showToast = (message, type = "success") => setToast({ message, type });
+
+  // Sync with sidebar nav
+  useEffect(() => {
+    if (activeSubSection === "add-resource")  setView(V.ADD);
+    if (activeSubSection === "all-resources") setView((v) => (v === V.ADD || v === V.ALL) ? V.ALL : v);
+  }, [activeSubSection]);
+
+  // Fetch
+  const fetchResources = useCallback(async () => {
+    try {
+      setLoading(true); setApiError(null);
+      const res = await resourceService.getAll();
+      setResources(res.data || []);
+    } catch {
+      setApiError("Failed to load resources.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchResources(); }, [fetchResources]);
+
+  // Nav helpers
+  const goAll  = ()  => { setView(V.ALL); onNavigate("resource-management", "all-resources"); };
+  const goEdit = (r) => { setEditingRes(r); setView(V.EDIT); };
+
+  // CRUD
+  const handleAdd = async (msg) => {
+    await fetchResources();
+    showToast(msg);
+    goAll();
+  };
+
+  const handleEdit = async (msg) => {
+    await fetchResources();
+    showToast(msg);
+    goAll();
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await resourceService.delete(id);
+      await fetchResources();
+      showToast("Resource deleted.", "warning");
+    } catch {
+      showToast("Failed to delete resource.", "error");
+    }
+  };
+
+  return (
+    <div className="w-full">
+      {view === V.ALL && (
+        <AllResources
+          resources={resources}
+          loading={loading}
+          error={apiError}
+          onEdit={isAdmin ? goEdit : null}
+          onDelete={isAdmin ? handleDelete : null}
+          onAddResource={() => onNavigate("resource-management", "add-resource")}
+        />
+      )}
+
+      {view === V.ADD && (
+        <AddResource
+          onBack={goAll}
+          onSuccess={handleAdd}
+        />
+      )}
+
+      {view === V.EDIT && editingRes && (
+        <EditResource
+          resource={editingRes}
+          onBack={goAll}
+          onSuccess={handleEdit}
+        />
+      )}
+
+      <Toast toast={toast} onClose={() => setToast(null)} />
+    </div>
+  );
+};
+
+export default ResourceManagement;

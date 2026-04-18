@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PackagePlus, ArrowLeft, ChevronDown } from "lucide-react";
 import resourceService from "../services/resourceService";
 
 // ── Validation ────────────────────────────────────────────────────────────────
 const validate = (f) => {
   const e = {};
-  if (!f.name || f.name.trim().length < 3)   e.name     = "Name must be at least 3 characters.";
-  if (f.name && f.name.trim().length > 50)    e.name     = "Name must be less than 50 characters.";
+  if (!f.name || f.name.trim().length < 3)        e.name     = "Name must be at least 3 characters.";
+  if (f.name && f.name.trim().length > 50)         e.name     = "Name must be less than 50 characters.";
   if (!f.location || f.location.trim().length < 2) e.location = "Location must be at least 2 characters.";
-  if (!f.capacity)                             e.capacity = "Capacity is required.";
-  else if (Number(f.capacity) <= 0)            e.capacity = "Capacity must be greater than 0.";
-  else if (Number(f.capacity) > 500)           e.capacity = "Capacity cannot exceed 500.";
-  if (!["ROOM","LAB","EQUIPMENT"].includes(f.type)) e.type = "Select a valid type.";
+  if (!f.capacity)                                  e.capacity = "Capacity is required.";
+  else if (Number(f.capacity) <= 0)                 e.capacity = "Capacity must be greater than 0.";
+  else if (Number(f.capacity) > 500)                e.capacity = "Capacity cannot exceed 500.";
+  if (!["ROOM","LAB","EQUIPMENT"].includes(f.type)) e.type     = "Select a valid type.";
   return e;
 };
 
@@ -22,13 +22,8 @@ const Field = ({ label, name, type = "text", value, onChange, error, placeholder
       {label}{required && <span className="text-rose-400 ml-1">*</span>}
     </label>
     <input
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      min={min}
-      max={max}
+      type={type} name={name} value={value} onChange={onChange}
+      placeholder={placeholder} min={min} max={max}
       className={`w-full px-4 py-3 rounded-xl bg-white/[0.04] border text-white text-[13px] placeholder-white/15 outline-none transition-all ${
         error
           ? "border-rose-500/40 focus:border-rose-500/60 bg-rose-500/5"
@@ -40,12 +35,22 @@ const Field = ({ label, name, type = "text", value, onChange, error, placeholder
 );
 
 // ── Main Component ────────────────────────────────────────────────────────────
-const INIT = { name: "", type: "ROOM", capacity: "", location: "", status: "ACTIVE" };
-
-const AddResource = ({ onBack, onSuccess }) => {
-  const [form,       setForm]       = useState(INIT);
+const EditResource = ({ resource, onBack, onSuccess }) => {
+  const [form,       setForm]       = useState({ name: "", type: "ROOM", capacity: "", location: "", status: "ACTIVE" });
   const [errors,     setErrors]     = useState({});
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (resource) {
+      setForm({
+        name:     resource.name     ?? "",
+        type:     resource.type     ?? "ROOM",
+        capacity: resource.capacity ?? "",
+        location: resource.location ?? "",
+        status:   resource.status === "AVAILABLE" ? "ACTIVE" : (resource.status ?? "ACTIVE"),
+      });
+    }
+  }, [resource]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,15 +64,17 @@ const AddResource = ({ onBack, onSuccess }) => {
     if (Object.keys(errs).length) { setErrors(errs); return; }
     try {
       setSubmitting(true);
-      await resourceService.create({ ...form, capacity: parseInt(form.capacity, 10) });
-      onSuccess("Resource created successfully.");
+      await resourceService.update(resource.id, { ...form, capacity: parseInt(form.capacity, 10) });
+      onSuccess("Resource updated successfully.");
     } catch (err) {
       const msg = err?.response?.data?.message || "";
-      setErrors({ _global: msg || "Failed to create resource. Please try again." });
+      setErrors({ _global: msg || "Failed to update resource. Please try again." });
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (!resource) return null;
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center py-10 px-4">
@@ -91,8 +98,8 @@ const AddResource = ({ onBack, onSuccess }) => {
               <PackagePlus size={18} className="text-indigo-400" />
             </div>
             <div className="text-left">
-              <h2 className="text-white font-bold text-[16px] tracking-tight">Add New Resource</h2>
-              <p className="text-white/25 text-[12px]">Fill in the details to create a resource</p>
+              <h2 className="text-white font-bold text-[16px] tracking-tight">Edit Resource</h2>
+              <p className="text-white/25 text-[12px]">Update the resource details below</p>
             </div>
           </div>
 
@@ -104,14 +111,12 @@ const AddResource = ({ onBack, onSuccess }) => {
             )}
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              {/* Name */}
               <Field
                 label="Resource Name" name="name" value={form.name}
                 onChange={handleChange} error={errors.name}
                 placeholder="e.g., Computer Laboratory A" required
               />
 
-              {/* Type + Capacity row */}
               <div className="grid grid-cols-2 gap-4">
                 {/* Type */}
                 <div className="flex flex-col gap-1.5 text-left">
@@ -142,7 +147,6 @@ const AddResource = ({ onBack, onSuccess }) => {
                 />
               </div>
 
-              {/* Location */}
               <Field
                 label="Location" name="location" value={form.location}
                 onChange={handleChange} error={errors.location}
@@ -157,14 +161,13 @@ const AddResource = ({ onBack, onSuccess }) => {
                     name="status" value={form.status} onChange={handleChange}
                     className="w-full px-4 py-3 pr-9 rounded-xl bg-white/[0.04] border border-white/[0.08] text-white text-[13px] outline-none transition-all appearance-none cursor-pointer focus:border-indigo-500/50"
                   >
-                    <option value="ACTIVE"         className="bg-[#12122e]">✅ Active (Available for booking)</option>
-                    <option value="OUT_OF_SERVICE"  className="bg-[#12122e]">❌ Out of Service (Not available)</option>
+                    <option value="ACTIVE"        className="bg-[#12122e]">✅ Active (Available for booking)</option>
+                    <option value="OUT_OF_SERVICE" className="bg-[#12122e]">❌ Out of Service (Not available)</option>
                   </select>
                   <ChevronDown size={13} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/25 pointer-events-none" />
                 </div>
               </div>
 
-              {/* Actions */}
               <div className="flex gap-3 pt-2">
                 <button
                   type="button" onClick={onBack}
@@ -178,7 +181,7 @@ const AddResource = ({ onBack, onSuccess }) => {
                 >
                   {submitting
                     ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    : <><PackagePlus size={14} /> Create Resource</>
+                    : <><PackagePlus size={14} /> Update Resource</>
                   }
                 </button>
               </div>
@@ -190,4 +193,4 @@ const AddResource = ({ onBack, onSuccess }) => {
   );
 };
 
-export default AddResource;
+export default EditResource;
