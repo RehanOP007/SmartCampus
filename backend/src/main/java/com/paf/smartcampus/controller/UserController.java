@@ -6,6 +6,8 @@ import com.paf.smartcampus.entity.User;
 import com.paf.smartcampus.repository.UserRepository;
 import com.paf.smartcampus.service.UserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,11 +47,13 @@ public class UserController {
 
     //Delete user
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
     @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
     public User updateRole(@PathVariable Long id, @RequestParam String role) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));

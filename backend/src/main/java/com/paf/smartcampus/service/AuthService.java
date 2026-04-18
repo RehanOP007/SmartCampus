@@ -16,7 +16,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // 🔐 REGISTER
+    // REGISTER
     public AuthResponseDTO register(UserRequestDTO request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
@@ -34,7 +34,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
         return AuthResponseDTO.builder()
                 .token(token)
@@ -42,7 +42,7 @@ public class AuthService {
                 .build();
     }
 
-    // 🔐 LOGIN
+    // LOGIN
     public AuthResponseDTO login(LoginRequestDTO request) {
 
         User user = userRepository.findByUsername(request.getUsername())
@@ -52,7 +52,7 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        String token = jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
         return AuthResponseDTO.builder()
                 .token(token)

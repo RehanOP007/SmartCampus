@@ -20,19 +20,20 @@ public class ResourceService {
 
     private Resource mapToEntity(ResourceRequestDTO dto) {
         if (dto.getType() == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Resource type is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Resource type is required");
         }
 
         if (dto.getStatus() == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Resource status is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Resource status is required");
         }
 
         return Resource.builder()
                 .name(dto.getName())
                 .type(Resource.Type.valueOf(dto.getType().toUpperCase()))
                 .capacity(dto.getCapacity())
+                .availableCapacity(dto.getCapacity())
                 .location(dto.getLocation())
-                .status(Resource.Status.valueOf(dto.getStatus().toUpperCase()))
+                .status(Resource.Status.AVAILABLE)
                 .build();
     }
 
@@ -42,6 +43,7 @@ public class ResourceService {
                 .name(resource.getName())
                 .type(resource.getType().name())
                 .capacity(resource.getCapacity())
+                .availableCapacity(resource.getAvailableCapacity())
                 .location(resource.getLocation())
                 .status(resource.getStatus().name())
                 .build();
@@ -55,26 +57,70 @@ public class ResourceService {
     }
 
     public ResourceResponseDTO createResource(ResourceRequestDTO dto) {
+
+        if (resourceRepository.findByName(dto.getName()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Resource name already exists");
+        }
+
         Resource resource = mapToEntity(dto);
         return mapToDTO(resourceRepository.save(resource));
     }
 
     public ResourceResponseDTO updateResource(Long id, ResourceRequestDTO dto) {
 
-    Resource resource = resourceRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Resource not found"));
+        Resource resource = resourceRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
 
-        if (dto.getType() == null || dto.getStatus() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Type and Status are required");
+        // ✅ Name (with uniqueness check)
+        if (dto.getName() != null) {
+            resourceRepository.findByName(dto.getName())
+                    .ifPresent(existing -> {
+                        if (!existing.getId().equals(resource.getId())) {
+                            throw new ResponseStatusException(HttpStatus.CONFLICT, "Resource name already exists");
+                        }
+                    });
+
+            resource.setName(dto.getName());
         }
 
-        resource.setName(dto.getName());
-        resource.setType(Resource.Type.valueOf(dto.getType().toUpperCase()));
-        resource.setCapacity(dto.getCapacity());
-        resource.setLocation(dto.getLocation());
-        resource.setStatus(Resource.Status.valueOf(dto.getStatus().toUpperCase()));
+        // ✅ Type
+        if (dto.getType() != null) {
+            try {
+                resource.setType(Resource.Type.valueOf(dto.getType().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid type");
+            }
+        }
+
+        // ✅ Status
+        if (dto.getStatus() != null) {
+            try {
+                resource.setStatus(Resource.Status.valueOf(dto.getStatus().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status");
+            }
+        }
+
+        // ✅ Capacity
+        if (dto.getCapacity() != null) {
+            resource.setCapacity(dto.getCapacity());
+        }
+
+        // ✅ Location
+        if (dto.getLocation() != null) {
+            resource.setLocation(dto.getLocation());
+        }
 
         return mapToDTO(resourceRepository.save(resource));
+    }
+
+    public ResourceResponseDTO getResourceById(Long id) {
+
+        Resource resource = resourceRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Resource not found"));
+
+        return mapToDTO(resource);
     }
 
     public void deleteResource(Long id) {

@@ -9,11 +9,13 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    // 🔥 Find overlapping bookings
+    // Find overlapping bookings
     List<Booking> findByResourceIdAndDateAndStartTimeLessThanEqualAndEndTimeGreaterThanEqual(
             Long resourceId,
             LocalDate date,
             LocalTime endTime,
             LocalTime startTime
     );
+
+    List<Booking> findByResourceId(Long resourceId);
 }

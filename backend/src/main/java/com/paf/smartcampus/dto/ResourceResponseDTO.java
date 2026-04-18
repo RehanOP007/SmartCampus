@@ -11,6 +11,7 @@ public class ResourceResponseDTO {
     private String name;
     private String type;
     private int capacity;
+    private int availableCapacity;
     private String location;
     private String status;
 }

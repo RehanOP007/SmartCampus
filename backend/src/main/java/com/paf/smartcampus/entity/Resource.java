@@ -16,12 +16,15 @@ public class Resource {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    private int capacity;
+    private Integer capacity;
+
+    private Integer availableCapacity;
 
     private String location;
 
@@ -36,6 +39,9 @@ public class Resource {
 
     public enum Status {
         ACTIVE,
+        MAINTENANCE,
+        AVAILABLE,
+        BOOKED,
         OUT_OF_SERVICE
     }
 }

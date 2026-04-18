@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     // GOOGLE SUCCESS
-    @GetMapping("/success")
+   {/* @GetMapping("/success")
     public void loginSuccess(HttpServletResponse response,
                              @AuthenticationPrincipal OAuth2User oauthUser) throws IOException {
 
@@ -55,9 +55,9 @@ public class AuthController {
                                 .build()
                 ));
 
-        String token = jwtUtil.generateToken(email);
+        String token = jwtUtil.generateToken(email, user.getRole().name());
 
         // redirect to React
         response.sendRedirect("http://localhost:5174/smartcampus/oauth-success?token=" + token);
-    }
+}*/}
 }

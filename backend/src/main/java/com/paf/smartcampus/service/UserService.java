@@ -46,6 +46,8 @@ public class UserService {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
+                .username(user.getUsername())  
+                .provider(user.getProvider()) 
                 .role(user.getRole().name())
                 .build();
     }

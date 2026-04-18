@@ -1,5 +1,7 @@
 package com.paf.smartcampus.config;
 
+import com.paf.smartcampus.entity.User;
+import com.paf.smartcampus.repository.UserRepository;
 import com.paf.smartcampus.security.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import java.io.IOException;
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @Override
     public void onAuthenticationSuccess(
@@ -29,9 +32,25 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
         String email = oauthUser.getAttribute("email");
 
-        String token = jwtUtil.generateToken(email);
+        String generatedUsername = email.split("@")[0] + "_" + System.currentTimeMillis();
 
-         response.sendRedirect("http://localhost:5174/smartcampus/oauth-success?token=" + token);
+        // Find or create user FIRST
+        User user = userRepository.findByEmail(email)
+            .orElseGet(() -> userRepository.save(
+                User.builder()
+                    .email(email)
+                    .name(oauthUser.getAttribute("name"))
+                    .username(generatedUsername)
+                    .provider("GOOGLE")
+                    .role(User.Role.USER)
+                    .build()
+            ));
+
+        // THEN generate token
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+
+        // redirect
+        response.sendRedirect("http://localhost:5174/smartcampus/oauth-success?token=" + token);
         
     }
 }

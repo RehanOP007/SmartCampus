@@ -36,7 +36,7 @@ public class GoogleAuthService {
                 String email = payload.getEmail();
                 String name = (String) payload.get("name");
 
-                // 🔥 Check if user exists
+                // Check if user exists
                 return userRepository.findAll().stream()
                         .filter(u -> u.getEmail().equals(email))
                         .findFirst()

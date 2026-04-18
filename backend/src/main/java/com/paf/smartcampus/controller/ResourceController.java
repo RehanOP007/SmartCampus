@@ -1,11 +1,11 @@
 package com.paf.smartcampus.controller;
 
-
 import com.paf.smartcampus.dto.ResourceRequestDTO;
 import com.paf.smartcampus.dto.ResourceResponseDTO;
-import com.paf.smartcampus.entity.Resource;
 import com.paf.smartcampus.service.ResourceService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +23,14 @@ public class ResourceController {
         return resourceService.getAllResources();
     }
 
+    @GetMapping("/{id}")
+    public ResourceResponseDTO getResourceById(@PathVariable Long id) {
+        return resourceService.getResourceById(id);
+    }
+
     // POST create resource
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResourceResponseDTO createResource(@RequestBody ResourceRequestDTO dto) {
         return resourceService.createResource(dto);
     }
