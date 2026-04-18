@@ -34,6 +34,16 @@ public class AuthController {
         return authService.login(request);
     }
 
+    @GetMapping("/me")
+    public UserResponseDTO getCurrentUser(@AuthenticationPrincipal User user) {
+        return UserResponseDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .build();
+    }
+
     // GOOGLE SUCCESS
    {/* @GetMapping("/success")
     public void loginSuccess(HttpServletResponse response,

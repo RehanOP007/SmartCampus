@@ -27,6 +27,14 @@ public class BookingController {
     public List<BookingResponseDTO> getAllBookings() {
         return bookingService.getAllBookings();
     }
+    
+    @PutMapping("/{id}")
+    public BookingResponseDTO updateBooking(
+            @PathVariable Long id,
+            @RequestBody BookingRequestDTO dto
+    ) {
+        return bookingService.updateBooking(id, dto);
+    }
 
     @PutMapping("/{id}/approve")
     @PreAuthorize("hasRole('ADMIN')")

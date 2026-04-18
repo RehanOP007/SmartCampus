@@ -18,14 +18,11 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Creator
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    
 
     // Related resource
     @ManyToOne
-    @JoinColumn(name = "resource_id", nullable = false)
+    @JoinColumn(name = "resource_id")
     private Resource resource;
 
     // Assigned technician (also a User)
@@ -35,11 +32,21 @@ public class Ticket {
 
     private String description;
 
+    private String title;
+
+     @Enumerated(EnumType.STRING)
+    private Type type;
+
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    // Creator
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User createdBy;
 
     private LocalDateTime createdAt;
 
@@ -55,5 +62,11 @@ public class Ticket {
         RESOLVED,
         CLOSED,
         REJECTED
+    }
+
+    public enum Type {
+        TECHNICAL,
+        FACILITY,
+        OTHER
     }
 }

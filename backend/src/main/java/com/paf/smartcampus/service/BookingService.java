@@ -159,6 +159,7 @@ public class BookingService {
                 
         }
 
+        resourceRepository.save(resource);
         Booking saved = bookingRepository.save(booking);
 
         // SEND NOTIFICATION
@@ -178,13 +179,28 @@ public class BookingService {
         
         Resource resource = resourceRepository.findById(booking.getResource().getId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
-
+        
         int currentCapacity = resource.getAvailableCapacity();
 
         booking.setStatus(Booking.Status.CANCELLED);
-        resource.setStatus(Resource.Status.AVAILABLE);
-        resource.setAvailableCapacity(currentCapacity + booking.getAttendees());
+        resource.setAvailableCapacity(currentCapacity + booking.getAttendees());        
 
+        if(resource.getStatus() == Resource.Status.MAINTENANCE) {
+
+                String message = "Your booking for " + booking.getResource().getName() +
+                " on " + booking.getDate() + " is cancelled due to maintenance.";
+
+                notificationService.sendNotification(booking.getUser(), message);
+        } else {
+                resource.setStatus(Resource.Status.AVAILABLE);
+
+                String message = "Your booking for " + booking.getResource().getName() +
+                " on " + booking.getDate() + " is cancelled.";
+
+                notificationService.sendNotification(booking.getUser(), message);
+        }
+
+        resourceRepository.save(resource);
         return mapToDTO(bookingRepository.save(booking));
     }
 
