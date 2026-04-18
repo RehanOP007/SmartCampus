@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { LoginPage } from "./pages/Login";
 import { RegisterPage } from "./pages/RegisterPage";
-import Dashboard from "./Component1/pages/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 import AdminDashboard from "./Component1/pages/Admin/Admindashboard";
 import OAuthSuccess from "./pages/OAuthSuccess";
@@ -22,10 +21,10 @@ function App() {
 
           {/* Protected */}
           <Route
-            path="/smartcampus/user-dashboard"
+            path="/smartcampus/admin-dashboard" 
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <AdminDashboard />
               </ProtectedRoute>
             }
           />
