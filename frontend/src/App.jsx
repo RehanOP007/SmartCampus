@@ -4,6 +4,7 @@ import { LoginPage } from "./pages/Login";
 import { RegisterPage } from "./pages/RegisterPage";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 import AdminDashboard from "./Component1/pages/Admin/Admindashboard";
+import UserDashboard from "./Component1/pages/UserDashboard/UserDashboard";
 import OAuthSuccess from "./pages/OAuthSuccess";
 
 function App() {
@@ -25,6 +26,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/smartcampus/user-dashboard" 
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
               </ProtectedRoute>
             }
           />

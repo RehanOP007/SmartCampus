@@ -22,9 +22,10 @@ const AdminDashboard = () => {
 
   const titles = {
     "all-users":    { title: "Users",    sub: "Manage your platform users and settings"    },
-    "add-user":     { title: "Add User",            sub: "Create a new platform account"              },
+    "add-user":     { title: "Add User", sub: "Create a new platform account"              },
     "all-bookings": { title: "Bookings",  sub: "View and manage all booking requests"       },
     "all-tickets":  { title: "Tickets",   sub: "View and manage all support tickets"        },
+    "all-resources": { title: "Resources", sub: "View and manage all platform resources"     },
   };
   const { title, sub } = titles[activeSubSection] ?? titles["all-users"];
 

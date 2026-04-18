@@ -116,10 +116,6 @@ const AllTickets = ({ tickets, loading, error, onView, onEdit, onDelete, onAssig
             <h2 className="text-white font-semibold text-[15px]" style={{ fontFamily: "'Sora', sans-serif" }}>All Tickets</h2>
             <span className="ml-1 text-xs text-white/25 font-medium">{filtered.length} shown</span>
           </div>
-          <button onClick={onAddTicket}
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-[13px] font-semibold px-4 py-2 rounded-xl transition-all shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 active:scale-95">
-            <Plus size={14} /> Add Ticket
-          </button>
         </div>
 
         {/* Filters */}

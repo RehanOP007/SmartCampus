@@ -40,5 +40,5 @@ export const ticketAPI = {
   update:       (id, data)          => api.put(`/api/tickets/${id}`, data),
   delete:       (id)                => api.delete(`/api/tickets/${id}`),
   updateStatus: (id, status)        => api.put(`/api/tickets/${id}/status?status=${status}`),
-  assignTech:   (id, technicianId)  => api.put(`/api/tickets/${id}/assign?technicianId=${technicianId}`),
+  assignTech:   (id, technicianId)  => api.put(`/api/tickets/${id}/assign?techId=${technicianId}`),
 };

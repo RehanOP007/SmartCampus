@@ -32,6 +32,14 @@ const NAV = [
       { key: "all-tickets", label: "All Tickets", icon: ClipboardList },
     ],
   },
+  {
+    key: "resource-management",
+    label: "Resources",
+    icon: Hexagon,
+    children: [
+      { key: "all-resources", label: "All Resources", icon: ClipboardList },
+    ],
+  },
 ];
 
 const AdminSidebar = ({ activeSection, activeSubSection, onNavigate, onLogout }) => {
@@ -40,6 +48,7 @@ const AdminSidebar = ({ activeSection, activeSubSection, onNavigate, onLogout })
     "user-management":    true,
     "booking-management": true,
     "ticket-management":  true,
+    "resource-management": true,
   });
 
   const toggle = (key) => setOpen((p) => ({ ...p, [key]: !p[key] }));
