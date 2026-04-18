@@ -41,14 +41,17 @@ export const ticketAPI = {
   delete:       (id)                => api.delete(`/api/tickets/${id}`),
   updateStatus: (id, status)        => api.put(`/api/tickets/${id}/status?status=${status}`),
   assignTech:   (id, technicianId)  => api.put(`/api/tickets/${id}/assign?techId=${technicianId}`),
-  addComment:  (id, comment)       => api.post(`/api/tickets/${id}/comments`, { comment }),
-  uploadAttachment: (id, file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    return api.post(`/api/tickets/${id}/attachments`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-  },
+  addComment: (id, comment, userId) =>
+  api.post(`/api/tickets/${id}/comments?userId=${userId}`, {
+    comment: comment.trim(),
+  }),
+  uploadAttachment: (id, fileUrl, fileName) =>
+  api.post(`/api/tickets/${id}/attachments`, null, {
+    params: {
+      fileUrl,
+      fileName,
+    },
+  }),
   getAttachments: (id) => api.get(`/api/tickets/${id}/attachments`),
   deleteAttachment: (attachmentId) => api.delete(`/api/attachments/${attachmentId}`),
 };

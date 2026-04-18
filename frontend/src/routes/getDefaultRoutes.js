@@ -6,7 +6,7 @@ export const getDefaultRoute = (role) => {
       return "/smartcampus/admin-dashboard";
 
     case "technician":
-      return "/smartcampus/technician-dashboard";
+      return "/smartcampus/tech-dashboard";
 
     case "user":
       return "/smartcampus/user-dashboard";
