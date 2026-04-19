@@ -55,3 +55,7 @@ export const ticketAPI = {
   getAttachments: (id) => api.get(`/api/tickets/${id}/attachments`),
   deleteAttachment: (attachmentId) => api.delete(`/api/attachments/${attachmentId}`),
 };
+
+export const notificationAPI = {
+  getAllForUser: (userId) => api.get(`/api/notifications/${userId}`),
+};

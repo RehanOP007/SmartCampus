@@ -55,27 +55,27 @@ const ResourceCard = ({ resource, onEdit, onDelete }) => {
         </div>
 
         {/* Footer actions */}
-        {(onEdit || onDelete) && (
-          <div className="flex border-t border-white/[0.06]">
-            {onEdit && (
-              <button
-                onClick={onEdit}
-                className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[12px] font-semibold text-white/30 hover:text-indigo-400 hover:bg-indigo-500/5 transition-all"
-              >
-                <Pencil size={12} /> Edit
-              </button>
-            )}
-            {onEdit && onDelete && <div className="w-px bg-white/[0.06]" />}
-            {onDelete && (
-              <button
-                onClick={() => setShowDelete(true)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[12px] font-semibold text-white/30 hover:text-rose-400 hover:bg-rose-500/5 transition-all"
-              >
-                <Trash2 size={12} /> Delete
-              </button>
-            )}
-          </div>
-        )}
+      {(onEdit || onDelete) && (
+        <div className="flex border-t border-white/[0.06]">
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[12px] font-semibold text-[#8686AC] hover:text-indigo-400 hover:bg-indigo-500/5 transition-all"
+            >
+              <Pencil size={12} /> Edit
+            </button>
+          )}
+          {onEdit && onDelete && <div className="w-px bg-white/[0.06]" />}
+          {onDelete && (
+            <button
+              onClick={() => setShowDelete(true)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-3 text-[12px] font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/5 transition-all"
+            >
+              <Trash2 size={12} /> Delete
+            </button>
+          )}
+        </div>
+      )}
       </div>
 
       {/* Delete Modal */}

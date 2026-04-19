@@ -9,7 +9,7 @@ import Resources from "../../../Component2/pages/Resources";
 import { useAuth }       from "../../../context/AuthContext";
 
 const AdminDashboard = () => {
-  const { logout } = useAuth();
+  const { logout, role } = useAuth();
 
   const [activeSection,    setActiveSection]    = useState("user-management");
   const [activeSubSection, setActiveSubSection] = useState("all-users");
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
           {activeSection === "user-management"    && <UserManagement    activeSubSection={activeSubSection} onNavigate={handleNavigate} />}
           {activeSection === "booking-management" && <BookingManagement activeSubSection={activeSubSection} onNavigate={handleNavigate} />}
           {activeSection === "ticket-management"  && <TicketManagement  activeSubSection={activeSubSection} onNavigate={handleNavigate} />}
-          {activeSection === "resource-management" && <Resources  activeSubSection={activeSubSection} onNavigate={handleNavigate}/>}
+          {activeSection === "resource-management" && <Resources  activeSubSection={activeSubSection} onNavigate={handleNavigate} userRole={role}/>}
         </main>
       </div>
     </div>

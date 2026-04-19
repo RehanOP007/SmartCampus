@@ -39,7 +39,7 @@ const Toast = ({ toast, onClose }) => {
 const V = { ALL: "all", ADD: "add", EDIT: "edit" };
 
 // ── Main ──────────────────────────────────────────────────────────────────────
-const ResourceManagement = ({ activeSubSection, onNavigate }) => {
+const ResourceManagement = ({ activeSubSection, onNavigate, userRole }) => {
   const [resources,    setResources]    = useState([]);
   const [loading,      setLoading]      = useState(false);
   const [apiError,     setApiError]     = useState(null);
@@ -47,7 +47,7 @@ const ResourceManagement = ({ activeSubSection, onNavigate }) => {
   const [editingRes,   setEditingRes]   = useState(null);
   const [toast,        setToast]        = useState(null);
 
-  const userRole = localStorage.getItem("userRole");
+  //const userRole = localStorage.getItem("userRole");
   const isAdmin  = userRole === "ADMIN";
 
   const showToast = (message, type = "success") => setToast({ message, type });
