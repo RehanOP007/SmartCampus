@@ -70,7 +70,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleUpdate = async (id, data) => {
     await bookingAPI.updateStatus(id, data.status);
     await fetchBookings();
-    showToast("Booking updated.");
+    showToast("The Booking updated.");
     goAll();
   };
 
