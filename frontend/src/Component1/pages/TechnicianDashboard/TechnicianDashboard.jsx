@@ -226,7 +226,7 @@ const TicketDetailModal = ({ ticket, onClose, onStatusUpdated, userId }) => {
           <button
             disabled={busyStatus}
             onClick={() => handleStatusChange(nextStatus)}
-            className="flex items-center gap-1 bg-[#505081] hover:bg-[#8686AC] text-white text-sm font-medium px-4 py-2 rounded-lg transition-all disabled:opacity-50"
+            className="flex items-center gap-2 bg-[#505081] hover:bg-[#8686AC] text-white text-sm font-medium px-4 py-2 rounded-lg transition-all disabled:opacity-50"
           >
             {busyStatus ? "Updating…" : `Advance to ${nextStatus.replace("_", " ")}`}
             <IconArrowRight />
