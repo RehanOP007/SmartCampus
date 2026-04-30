@@ -77,7 +77,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleApprove = async (id) => {
     await bookingAPI.approve(id);
     await fetchBookings();
-    showToast("Booking approved.", "Success");
+    showToast("The Booking Approved.", "Success");
     if (view === "view") {
       // refresh selected
       const res = await bookingAPI.getAll();
@@ -89,7 +89,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleReject = async (id) => {
     await bookingAPI.reject(id);
     await fetchBookings();
-    showToast("Booking rejected.", "Warning");
+    showToast("The Booking Rejected.", "Warning");
     if (view === "view") {
       const res = await bookingAPI.getAll();
       const updated = res.data.find((b) => b.id === id);
@@ -100,7 +100,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleCancel = async (id) => {
     await bookingAPI.cancel(id);
     await fetchBookings();
-    showToast("Booking cancelled.", "Warning");
+    showToast("The Booking Cancelled.", "Warning");
     if (view !== "all") goAll();
   };
 
