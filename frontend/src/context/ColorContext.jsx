@@ -8,7 +8,7 @@ const color =[
 
 export const colors = {
     // Deep UI Foundation
-    background: "bg-[#0F0E47]",        // The darkest navy for the main canvas
+    background: "bg-[#0F0E47]",        
     cardBg: "bg-[#272757]",            // Elevated surface color for cards
     inputBg: "bg-[#0F0E47]/50",        // Sunken look for input fields
     
