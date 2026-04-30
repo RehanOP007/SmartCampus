@@ -77,7 +77,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleApprove = async (id) => {
     await bookingAPI.approve(id);
     await fetchBookings();
-    showToast("Booking approved.", "success");
+    showToast("Booking approved.", "Success");
     if (view === "view") {
       // refresh selected
       const res = await bookingAPI.getAll();
