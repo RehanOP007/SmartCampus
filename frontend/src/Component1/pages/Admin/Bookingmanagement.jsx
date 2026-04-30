@@ -124,7 +124,14 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
         <UpdateBooking booking={selected} onBack={goAll} onSubmit={handleUpdate} />
       )}
       <Toast toast={toast} onClose={() => setToast(null)} />
+
+          {view === "edit" && selected && (
+        <UpdateBooking booking={selected} onBack={goAll} onSubmit={handleUpdate} />
+      )}
+      <Toast toast={toast} onClose={() => setToast(null)} />
+        
     </div>
+    
   );
 };
 
