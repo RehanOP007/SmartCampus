@@ -9,9 +9,9 @@ import { userAPI }  from "../../utils/c1.api";
 
 // ── Toast ────────────────────────────────────────────────────────────────────
 const TSTYLE = {
-  success: "bg-emerald-950/80 border-emerald-500/30 text-emerald-300",
-  error:   "bg-rose-950/80    border-rose-500/30    text-rose-300",
-  warning: "bg-amber-950/80   border-amber-500/30   text-amber-300",
+  success: "bg-emerald-950/80 border-emerald-400/30 text-emerald-300",
+  error:   "bg-rose-950/80    border-rose-400/30    text-rose-300",
+  warning: "bg-amber-950/80   border-amber-400/30   text-amber-300",
 };
 const TICON = {
   success: CheckCircle2,
