@@ -47,6 +47,7 @@ const AddResource = ({ onBack, onSuccess }) => {
   const [errors,     setErrors]     = useState({});
   const [submitting, setSubmitting] = useState(false);
 
+  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
@@ -191,3 +192,6 @@ const AddResource = ({ onBack, onSuccess }) => {
 };
 
 export default AddResource;
+
+
+// Add this to display

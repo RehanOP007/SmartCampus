@@ -28,6 +28,8 @@ public class Resource {
 
     private String location;
 
+    private String description;  // Resource description
+
     @Enumerated(EnumType.STRING)
     private Status status;
 

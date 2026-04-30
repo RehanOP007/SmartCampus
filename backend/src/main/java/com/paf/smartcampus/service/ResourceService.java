@@ -66,6 +66,13 @@ public class ResourceService {
         return mapToDTO(resourceRepository.save(resource));
     }
 
+    public Resource createResource(Resource resource) {
+    if (resource.getName() == null || resource.getName().trim().isEmpty()) {
+        throw new RuntimeException("Resource name cannot be empty");
+    }
+    return resourceRepository.save(resource);
+}
+
     public ResourceResponseDTO updateResource(Long id, ResourceRequestDTO dto) {
 
         Resource resource = resourceRepository.findById(id)
