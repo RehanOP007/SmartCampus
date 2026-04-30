@@ -95,3 +95,12 @@ export const getAttachments = (ticketId) => {
 export const deleteAttachment = (attachmentId) => {
   return api.delete(`/api/attachments/${attachmentId}`);
 };
+
+export const getNotificationsByUserId = (userId) => {
+  return api.get(`/api/notifications/${userId}`);
+};
+
+export const markAsRead = (notificationId) => {
+  return api.put(`/api/notifications/${notificationId}/read`);
+};
+
