@@ -70,7 +70,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleUpdate = async (id, data) => {
     await bookingAPI.updateStatus(id, data.status);
     await fetchBookings();
-    showToast("The Booking updated.");
+    showToast("The Booking Updated.");
     goAll();
   };
 
@@ -100,7 +100,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleCancel = async (id) => {
     await bookingAPI.cancel(id);
     await fetchBookings();
-    showToast("Booking cancelled.", "warning");
+    showToast("Booking cancelled.", "Warning");
     if (view !== "all") goAll();
   };
 
