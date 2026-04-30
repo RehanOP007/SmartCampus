@@ -89,7 +89,7 @@ const BookingManagement = ({ activeSubSection, onNavigate }) => {
   const handleReject = async (id) => {
     await bookingAPI.reject(id);
     await fetchBookings();
-    showToast("Booking rejected.", "warning");
+    showToast("Booking rejected.", "Warning");
     if (view === "view") {
       const res = await bookingAPI.getAll();
       const updated = res.data.find((b) => b.id === id);
