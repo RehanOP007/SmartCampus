@@ -24,7 +24,7 @@ const Toast = ({ toast, onClose }) => {
   if (!toast) return null;
   const Icon = TICON[toast.type] ?? CheckCircle2;
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-6 right-6 z-50">
       <div className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl border backdrop-blur-xl text-sm font-medium shadow-2xl ${TSTYLE[toast.type] ?? TSTYLE.success}`}>
         <Icon size={15} className="flex-shrink-0" />
         {toast.message}
